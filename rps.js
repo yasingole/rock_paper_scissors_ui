@@ -51,14 +51,6 @@ const playRound = (humanSelection, computerSelection) => {
 }
 
 const playGame= () => {
-    for (let i=0; i<5; i++) {
-        let humanSelection= humanChoice();
-        let computerSelection= computerChoice();
-        let result= playRound(humanSelection, computerSelection);
-        console.log(result);
-        console.log(`Round ${i + 1} Scores: Human ${scores.humanScore} - Computer ${scores.computerScore}`);
-    }
-
     if (scores.humanScore > scores.computerScore) {
         console.log("Congratulations! You won the game.");
     } else if (scores.computerScore > scores.humanScore) {
