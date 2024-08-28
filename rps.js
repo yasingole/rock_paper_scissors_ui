@@ -6,60 +6,75 @@ let scores = {
     computerScore: 0
 };
 
-// Get Computer choice, random number 1-3, equals R, P, S:
-const computerChoice= () => {
-    const randomNumber= Math.floor(Math.random() * 3)
+// Get Computer choice, random number 0-2, equals R, P, S:
+const computerChoice = () => {
+    const randomNumber = Math.floor(Math.random() * 3);
     if (randomNumber === 0) {
         return "ROCK";
     } else if (randomNumber === 1) {
         return "PAPER";
-    } else if (randomNumber === 2) {
+    } else {
         return "SCISSORS";
     }
 }
 
-// Get humanChoice function:
-const humanChoice= () => {
-    let choice= "";
-
-    while (choice !== "rock" && choice !== "paper" && choice !== "scissors") {
-        choice= prompt("Choose: Rock, Paper, Scissors!").toLowerCase();
-        
-        if (choice === "rock" || choice === "paper" || choice === "scissors") {
-            return choice.toUpperCase();
-        } else {
-            console.log("You have chosen an incorrect response ...")
-        }
-    }
-}
-
 // Function for playing rounds:
-const playRound = (humanSelection, computerSelection) => {
+const playRound = (humanSelection) => {
+    const computerSelection = computerChoice();
+    let result = "";
+
     if (humanSelection === computerSelection) {
-        return "It's a draw! You:"+ humanSelection + " Computer: " + computerSelection;
+        result = `It's a draw! You: ${humanSelection} Computer: ${computerSelection}`;
     } else if (
         (humanSelection === "ROCK" && computerSelection === "SCISSORS") || 
         (humanSelection === "SCISSORS" && computerSelection === "PAPER") ||
         (humanSelection === "PAPER" && computerSelection === "ROCK")
-     ) {
+    ) {
         scores.humanScore++;
-        return "Human wins: " + humanSelection + " beats " + computerSelection;
+        result = `Human wins: ${humanSelection} beats ${computerSelection}`;
     } else {
         scores.computerScore++;
-        return "You lose: " + computerSelection + " beats " + humanSelection;
+        result = `You lose: ${computerSelection} beats ${humanSelection}`;
+    }
+
+    updateResults(result);
+    checkWinner();
+}
+
+// Function to update the results and scores on the page
+const updateResults = (result) => {
+    document.getElementById("result").textContent = result;
+    document.getElementById("score").textContent = `Human: ${scores.humanScore} - Computer: ${scores.computerScore}`;
+}
+
+// Function to check if there is a winner
+const checkWinner = () => {
+    if (scores.humanScore === 5) {
+        document.getElementById("winner").textContent = "Congratulations! You won the game!";
+        resetGame();
+    } else if (scores.computerScore === 5) {
+        document.getElementById("winner").textContent = "The computer wins the game. Better luck next time!";
+        resetGame();
     }
 }
 
-const playGame= () => {
-    if (scores.humanScore > scores.computerScore) {
-        console.log("Congratulations! You won the game.");
-    } else if (scores.computerScore > scores.humanScore) {
-        console.log("The computer wins the game. Better luck next time!");
-    } else {
-        console.log("It's a tie game!");
-    }
-
-    console.log(`Final Scores: Human ${scores.humanScore} - Computer ${scores.computerScore}`);
+// Function to reset the game after a winner is announced
+const resetGame = () => {
+    scores.humanScore = 0;
+    scores.computerScore = 0;
+    document.getElementById("result").textContent = "";
+    document.getElementById("score").textContent = "";
+    setTimeout(() => {
+        document.getElementById("winner").textContent = "";
+    }, 3000); // Clear the winner message after 3 seconds
 }
 
-playGame();
+// Add event listeners to all buttons
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach(button => {
+    button.addEventListener("click", (event) => {
+        const choice = event.target.id.toUpperCase();
+        playRound(choice);
+    });
+});
