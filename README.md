@@ -15,4 +15,3 @@ The game is built using HTML and JavaScript. The player interacts with the game 
 - **Winner Declaration:** The game announces the winner when either the player or the computer reaches 5 points.
 - **Automatic Reset:** After a winner is declared, the game resets automatically for a new round.
 
-## Project Structure
